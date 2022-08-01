@@ -24,7 +24,8 @@
 // Default LED toggle delay value. LED toggling frequency is twice this number.
 //
 //*****************************************************************************
-#define LED_TOGGLE_DELAY        125
+#define LED_TOGGLE_DELAY_1        125
+#define LED_TOGGLE_DELAY_2        250
 
 
 //*****************************************************************************
@@ -33,7 +34,7 @@
 // can make the selections by pressing the left and right buttons.
 //
 //*****************************************************************************
-static void LEDTask(void *pvParameters)
+static void LEDTask1(void *pvParameters)
 {
     portTickType ui32WakeTime;
     uint32_t ui32LEDToggleDelay;
@@ -41,7 +42,57 @@ static void LEDTask(void *pvParameters)
     //
     // Initialize the LED Toggle Delay to default value.
     //
-    ui32LEDToggleDelay = LED_TOGGLE_DELAY;
+    ui32LEDToggleDelay = LED_TOGGLE_DELAY_1;
+
+    //
+    // Get the current tick count.
+    //
+    ui32WakeTime = xTaskGetTickCount();
+
+    //
+    // Loop forever.
+    //
+    while(1)
+    {
+
+        //
+        // Turn on the LED.
+        //
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
+
+        //
+        // Wait for the required amount of time.
+        //
+        vTaskDelayUntil(&ui32WakeTime, ui32LEDToggleDelay / portTICK_RATE_MS);
+
+        //
+        // Turn off the LED.
+        //
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
+
+        //
+        // Wait for the required amount of time.
+        //
+        vTaskDelayUntil(&ui32WakeTime, ui32LEDToggleDelay / portTICK_RATE_MS);
+    }
+}
+
+
+//*****************************************************************************
+//
+// This task toggles the user selected LED at a user selected frequency. User
+// can make the selections by pressing the left and right buttons.
+//
+//*****************************************************************************
+static void LEDTask2(void *pvParameters)
+{
+    portTickType ui32WakeTime;
+    uint32_t ui32LEDToggleDelay;
+
+    //
+    // Initialize the LED Toggle Delay to default value.
+    //
+    ui32LEDToggleDelay = LED_TOGGLE_DELAY_2;
 
     //
     // Get the current tick count.
@@ -76,6 +127,7 @@ static void LEDTask(void *pvParameters)
     }
 }
 
+
 uint32_t led_task_init()
 {
     //
@@ -94,12 +146,22 @@ uint32_t led_task_init()
     // Enable the GPIO pin for the LED (PG2).  Set the direction as output, and
     // enable the GPIO pin for digital function.
     //
+    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
 
     //
     // Create the LED task.
     //
-    if(xTaskCreate(LEDTask, (const portCHAR *)"LED", LEDTASKSTACKSIZE, NULL,
+    if(xTaskCreate(LEDTask1, (const portCHAR *)"LED1", LEDTASKSTACKSIZE, NULL,
+                   tskIDLE_PRIORITY + PRIORITY_LED_TASK, NULL) != pdTRUE)
+    {
+        return(1);
+    }
+
+    //
+    // Create the LED task.
+    //
+    if(xTaskCreate(LEDTask2, (const portCHAR *)"LED2", LEDTASKSTACKSIZE, NULL,
                    tskIDLE_PRIORITY + PRIORITY_LED_TASK, NULL) != pdTRUE)
     {
         return(1);
