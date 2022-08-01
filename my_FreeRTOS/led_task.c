@@ -24,7 +24,7 @@
 // Default LED toggle delay value. LED toggling frequency is twice this number.
 //
 //*****************************************************************************
-#define LED_TOGGLE_DELAY        500
+#define LED_TOGGLE_DELAY        125
 
 
 //*****************************************************************************
