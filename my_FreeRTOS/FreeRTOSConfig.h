@@ -78,12 +78,12 @@
 #define configUSE_16_BIT_TICKS              0
 #define configIDLE_SHOULD_YIELD             0
 #define configUSE_CO_ROUTINES               0
-#define configUSE_MUTEXES                   0
-#define configUSE_RECURSIVE_MUTEXES         0
+#define configUSE_MUTEXES                   1
+#define configUSE_RECURSIVE_MUTEXES         1
 #define configCHECK_FOR_STACK_OVERFLOW      2
 
 #define configMAX_PRIORITIES                16
-#define configMAX_CO_ROUTINE_PRIORITIES     ( 1 )
+#define configMAX_CO_ROUTINE_PRIORITIES     ( 2 )
 #define configQUEUE_REGISTRY_SIZE           10
 
 /* Set the following definitions to 1 to include the API function, or zero
@@ -92,7 +92,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskPrioritySet            1
 #define INCLUDE_uxTaskPriorityGet           1
 #define INCLUDE_vTaskDelete                 1
-#define INCLUDE_vTaskCleanUpResources       1
+#define INCLUDE_vTaskCleanUpResources       0
 #define INCLUDE_vTaskSuspend                1
 #define INCLUDE_vTaskDelayUntil             1
 #define INCLUDE_vTaskDelay                  1
