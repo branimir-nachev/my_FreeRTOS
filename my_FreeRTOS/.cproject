@@ -173,6 +173,7 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="my_FreeRTOS.com.ti.ccstudio.buildDefinitions.TMS470.ProjectType.1532432498" name="TMS470" projectType="com.ti.ccstudio.buildDefinitions.TMS470.ProjectType"/>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="scannerConfiguration"/>
 </cproject>

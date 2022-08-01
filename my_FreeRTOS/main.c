@@ -5,7 +5,35 @@
  */
 
 #include <global_include.h>
-#include "utils/uartstdio.h"
+#include <utils/uartstdio.h>
+#include <led_task.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "semphr.h"
+
+
+
+//*****************************************************************************
+//
+// This hook is called by FreeRTOS when an stack overflow error is detected.
+//
+//*****************************************************************************
+//void
+//vApplicationStackOverflowHook(xTaskHandle *pxTask, char *pcTaskName)
+void vApplicationStackOverflowHook( TaskHandle_t xTask,
+                                        char * pcTaskName )
+{
+    //
+    // This function can not return, so loop forever.  Interrupts are disabled
+    // on entry to this function, so no processor interrupts will interrupt
+    // this loop.
+    //
+    while(1)
+    {
+    }
+}
+
 
 //*****************************************************************************
 //
@@ -49,55 +77,31 @@ int main(void)
 
     ConfigureUART();
 
-    UARTprintf("Start program !");
+    UARTprintf("Start program !\n");
 
     //
-    // Enable the GPIO port that is used for the on-board LED.
+    // Create the LED task.
     //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-
-    //
-    // Check if the peripheral access is enabled.
-    //
-    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOF))
+    if(led_task_init() != 0)
     {
+
+        while(1)
+        {
+        }
     }
 
     //
-    // Enable the GPIO pin for the LED (PG2).  Set the direction as output, and
-    // enable the GPIO pin for digital function.
+    // Start the scheduler.  This should not return.
     //
-    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+    vTaskStartScheduler();
 
     //
-    // Loop forever.
+    // In case the scheduler returns for some reason, print an error and loop
+    // forever.
     //
+
     while(1)
     {
-        //
-        // Turn on the LED.
-        //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
-
-        //
-        // Delay for a bit.
-        //
-        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
-        {
-        }
-
-        //
-        // Turn off the LED.
-        //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
-
-        //
-        // Delay for a bit.
-        //
-        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
-        {
-        }
     }
 
-	return 0;
 }
