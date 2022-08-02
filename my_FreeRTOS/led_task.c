@@ -6,6 +6,7 @@
  */
 
 #include <global_include.h>
+#include <utils/uartstdio.h>
 #include "priorities.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -27,6 +28,7 @@
 #define LED_TOGGLE_DELAY_1        125
 #define LED_TOGGLE_DELAY_2        250
 
+extern xSemaphoreHandle g_pUARTSemaphore;
 
 //*****************************************************************************
 //
@@ -59,6 +61,15 @@ static void LEDTask1(void *pvParameters)
         // Turn on the LED.
         //
         GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
+
+        //
+        // Guard UART from concurrent access. Print the currently
+        // blinking frequency.
+        //
+        xSemaphoreTake(g_pUARTSemaphore, portMAX_DELAY);
+        UARTprintf("RED Led blinking frequency is %d ms.\n",
+                   (ui32LEDToggleDelay * 2));
+        xSemaphoreGive(g_pUARTSemaphore);
 
         //
         // Wait for the required amount of time.
@@ -109,6 +120,15 @@ static void LEDTask2(void *pvParameters)
         // Turn on the LED.
         //
         GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
+
+        //
+        // Guard UART from concurrent access. Print the currently
+        // blinking frequency.
+        //
+        xSemaphoreTake(g_pUARTSemaphore, portMAX_DELAY);
+        UARTprintf("BLUE Led blinking frequency is %d ms.\n",
+                   (ui32LEDToggleDelay * 2));
+        xSemaphoreGive(g_pUARTSemaphore);
 
         //
         // Wait for the required amount of time.

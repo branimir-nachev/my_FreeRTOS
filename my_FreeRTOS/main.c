@@ -13,6 +13,13 @@
 #include "semphr.h"
 
 
+//*****************************************************************************
+//
+// The mutex that protects concurrent access of UART from multiple tasks.
+//
+//*****************************************************************************
+xSemaphoreHandle g_pUARTSemaphore;
+
 
 //*****************************************************************************
 //
@@ -78,6 +85,11 @@ int main(void)
     ConfigureUART();
 
     UARTprintf("Start program !\n");
+
+    //
+    // Create a mutex to guard the UART.
+    //
+    g_pUARTSemaphore = xSemaphoreCreateMutex();
 
     //
     // Create the LED task.
