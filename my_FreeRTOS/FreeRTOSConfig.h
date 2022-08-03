@@ -83,7 +83,7 @@
 #define configCHECK_FOR_STACK_OVERFLOW      2
 
 #define configMAX_PRIORITIES                16
-#define configMAX_CO_ROUTINE_PRIORITIES     ( 2 )
+#define configMAX_CO_ROUTINE_PRIORITIES     ( 3 )
 #define configQUEUE_REGISTRY_SIZE           10
 
 /* Set the following definitions to 1 to include the API function, or zero
@@ -103,6 +103,5 @@ to exclude the API function. */
  */
 #define configKERNEL_INTERRUPT_PRIORITY         ( 7 << 5 )    /* Priority 7, or 0xE0 as only the top three bits are implemented.  This is the lowest priority. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY     ( 5 << 5 )  /* Priority 5, or 0xA0 as only the top three bits are implemented. */
-
 
 #endif /* FREERTOS_CONFIG_H */
