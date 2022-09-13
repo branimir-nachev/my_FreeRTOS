@@ -80,7 +80,6 @@ void ConfigureUART(void)
 
 int main(void)
 {
-    volatile uint32_t ui32Loop;
 
     ConfigureUART();
 
